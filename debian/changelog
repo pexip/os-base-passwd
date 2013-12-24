@@ -1,3 +1,9 @@
+base-passwd (3.5.24pexip1) pexip; urgency=low
+
+  * Prepare Pexip packaging
+
+ -- John-Mark Bell <jmb@pexip.com>  Tue, 24 Dec 2013 13:19:49 +0000
+
 base-passwd (3.5.24) unstable; urgency=low
 
   * Mark base-passwd Multi-Arch: foreign.
