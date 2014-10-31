@@ -1,3 +1,9 @@
+base-passwd (3.5.24pexip2) pexip; urgency=low
+
+  * Remove unused accounts
+
+ -- John-Mark Bell <jmb@pexip.com>  Wed, 01 Oct 2014 02:08:06 +0100
+
 base-passwd (3.5.24pexip1) pexip; urgency=low
 
   * Prepare Pexip packaging
