@@ -6,7 +6,7 @@ XSBC-Pexip-Original-Maintainer: Colin Watson <cjwatson@debian.org>
 Standards-Version: 3.6.0
 Build-Depends: sgmltools-lite, w3m, po4a
 Vcs-Bzr: http://anonscm.debian.org/bzr/users/cjwatson/base-passwd/trunk
-XS-Pexip-Upstream: http://archive.ubuntu.com/ubuntu/ precise
+XS-Pexip-Upstream: http://ftp.debian.org/debian/ jessie
 
 Package: base-passwd
 Architecture: any
