@@ -1,6 +1,6 @@
 root:*:0:0:root:/root:/bin/bash
-daemon:*:1:1:daemon:/usr/sbin:/bin/sh
-bin:*:2:2:bin:/bin:/bin/sh
-sys:*:3:3:sys:/dev:/bin/sh
-www-data:*:33:33:www-data:/var/www:/bin/sh
-nobody:*:65534:65534:nobody:/nonexistent:/bin/sh
+daemon:*:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:*:2:2:bin:/bin:/usr/sbin/nologin
+sys:*:3:3:sys:/dev:/usr/sbin/nologin
+www-data:*:33:33:www-data:/var/www:/usr/sbin/nologin
+nobody:*:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
