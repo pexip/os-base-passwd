@@ -1,3 +1,66 @@
+base-passwd (3.5.43pexip1) pexip; urgency=low
+
+  * Migrate to Stretch
+
+ -- John-Mark Bell <jmb@pexip.com>  Tue, 10 Jul 2018 17:09:54 +0100
+
+base-passwd (3.5.43) unstable; urgency=medium
+
+  * users-and-groups: Remove haldaemon (closes: #851455).
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 16 Jan 2017 15:52:12 +0000
+
+base-passwd (3.5.42) unstable; urgency=medium
+
+  * update-passwd(8) translations:
+    - French (thanks, Baptiste Jammet; closes: #844657).
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 02 Dec 2016 20:47:28 +0000
+
+base-passwd (3.5.41) unstable; urgency=medium
+
+  * Allocate uid/gid 64055 for libvirt guest migration support, by request
+    of Mauricio Faria de Oliveira (closes: #843881, LP: #1637601).
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 11 Nov 2016 21:45:48 +0000
+
+base-passwd (3.5.40) unstable; urgency=medium
+
+  * Use HTTPS for git URLs.
+  * Debconf translations:
+    - Brazilian Portuguese (thanks, José de Figueiredo; closes: #815514).
+  * update-passwd(8) translations:
+    - Japanese (thanks, Takuma Yamada; closes: #819211).
+  * Stop forcing gzip compression for .deb, as the vast majority of the rest
+    of the base system is now xz anyway.
+  * Policy version 3.9.8: no changes required.
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 16 Aug 2016 09:21:34 +0100
+
+base-passwd (3.5.39) unstable; urgency=medium
+
+  * Policy version 3.9.6: no changes required.
+  * Build with large file support.
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 02 Jan 2016 15:03:22 +0000
+
+base-passwd (3.5.38) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Simplify dpkg (>= 1.16.4) | sgml-base (<< 1.26+nmu2) build-dependency
+    (see changelog for 3.5.26) to just dpkg (>= 1.16.4), since that was some
+    time ago and wheezy has a sufficient version now, and the more elaborate
+    form causes a complaint from debcheck.
+  * Allocate uid/gid 64045 for ceph object storage, by request of Gaudenz
+    Steinlin.
+  * Allocate uid/gid 64050 for the Evergreen ILS, by request of Robin H.
+    Johnson.
+
+  [ Juan Picca ]
+  * Make documentation build reproducible (closes: #792520).
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 16 Jul 2015 13:26:42 +0100
+
 base-passwd (3.5.37pexip1) pexip; urgency=low
 
   * Migrate to Jessie
