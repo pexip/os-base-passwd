@@ -50,6 +50,9 @@ Reserved uids:
     64045 | ceph              | ceph object storage
     64050 | opensrf           | Evergreen ILS
     64055 | libvirt-qemu      | libvirt guest migration support
+    64060 | nova              | OpenStack Compute
+    64061 | cinder            | OpenStack Block Storage
+    64062 | glance            | OpenStack Image
 
 Reserved gids:
     gid   | name              | description
@@ -71,8 +74,11 @@ Reserved gids:
     64045 | ceph              | ceph object storage
     64050 | opensrf           | Evergreen ILS
     64055 | libvirt-qemu      | libvirt guest migration support
+    64060 | nova              | OpenStack Compute
+    64061 | cinder            | OpenStack Block Storage
+    64062 | glance            | OpenStack Image
 
-(Next uid/gid allocation: 64060.)
+(Next uid/gid allocation: 64065.)
 
 You *may not* use any uids or gids in the 60000-64999 range without *first*
 requesting an allocation from base-passwd@packages.debian.org and waiting
