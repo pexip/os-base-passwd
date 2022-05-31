@@ -1,3 +1,63 @@
+base-passwd (3.5.51) unstable; urgency=medium
+
+  [ Raf Czlonka ]
+  * update-passwd.8: Environment variables are 'set'.
+
+  [ Brian Murray ]
+  * update-passwd.c: Skip debconf question when changing irc's home
+    directory from /var/run/ircd to /run/ircd, since these are equivalent
+    (closes: #990879).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 10 Jul 2021 12:57:43 +0100
+
+base-passwd (3.5.50) unstable; urgency=medium
+
+  * Allocate uid/gid 64065 to gnocchi, by request of Billy Olsen (closes:
+    #983635).
+  * Debconf translations:
+    - Spanish (thanks, Camaleón; closes: #987337).
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 16 May 2021 11:23:55 +0100
+
+base-passwd (3.5.49) unstable; urgency=medium
+
+  [ Bastian Germann ]
+  * d/copyright: Fix public-domain paragraph (closes: #972495, LP: #610108).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 06 Feb 2021 17:48:56 +0000
+
+base-passwd (3.5.48) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Change ircd's home directory from /var/run/ircd to /run/ircd (closes:
+    #946884).
+  * users-and-groups: Refer to /run/utmp rather than /var/run/utmp.
+
+  [ Sven Joachim ]
+  * Use mktemp rather than tempfile in the postinst script.
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 11 Oct 2020 17:36:41 +0100
+
+base-passwd (3.5.47) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Use debhelper-compat instead of debian/compat.
+  * Adjust wildcards in debian/copyright so that all files are matched by at
+    least one paragraph.
+
+  [ Debian Janitor ]
+  * debian/copyright: Replace commas with whitespace to separate items
+    in Files paragraph.
+  * Update copyright file header to use current field names (Name =>
+    Upstream-Name, Maintainer => Upstream-Contact)
+  * Bump debhelper from old 9 to 12.
+  * Drop unnecessary dependency on dh-autoreconf.
+
+  [ Dimitri John Ledkov ]
+  * Switch from sgmltools-lite to docbook-utils.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 16 Dec 2019 23:51:51 +0000
+
 base-passwd (3.5.46pexip2) pexip; urgency=medium
 
   * Rebuild in buster environment

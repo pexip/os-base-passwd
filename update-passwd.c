@@ -927,7 +927,7 @@ void process_changed_accounts(struct _node* passwd, struct _node* group, struct 
 		const char *olddir = passwd->d.pw.pw_dir ? passwd->d.pw.pw_dir : "(none)";
 
 		make_change=1;
-		if (flag_debconf) {
+		if (flag_debconf && !((strcmp(passwd->name, "irc")==0) && (strcmp(olddir, "/var/run/ircd")==0))) {
 		    oldpart=escape_debconf(olddir);
 		    newpart=escape_debconf(mc->d.pw.pw_dir);
 		    question=xasprintf("base-passwd/%s/user/%s/home/%s/%s", user_domain, passwd->name, oldpart, newpart);
