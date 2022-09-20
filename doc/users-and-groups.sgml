@@ -25,13 +25,17 @@
     <copyright>
       <year>2001</year>
       <year>2002</year>
-      <year>2003</year>
-      <year>2004</year>
-      <year>2005</year>
-      <year>2007</year>
       <holder>Joey Hess</holder>
-      <holder>Colin Watson</holder>
+    </copyright>
+
+    <copyright>
+      <year>2005</year>
       <holder>David Mandelberg</holder>
+    </copyright>
+
+    <copyright>
+      <year>2001-2022</year>
+      <holder>Colin Watson</holder>
     </copyright>
 
     <legalnotice>
@@ -357,10 +361,11 @@
 	<term>gnats</term>
 	<listitem>
 	  <para>
-	    Used by <command>gnats</command>. This has a statically
+	    Used by <command>gnats</command>.  This had a statically
 	    allocated user and group for purely historical reasons (it could
-	    equally well use a dynamic system user and group), but it's
-	    cumbersome to change now.
+	    equally well use a dynamic system user and group).  Since
+	    <command>gnats</command> has been removed from Debian, this user
+	    and group are no longer created by default; they had uid/gid 41.
 	  </para>
 	</listitem>
       </varlistentry>
@@ -751,13 +756,24 @@
       </varlistentry>
 
       <varlistentry>
-	<term>ssh</term>
+	<term>_ssh</term>
 	<listitem>
 	  <para>
-	    <command>ssh-agent</command> is setgid to ssh in order to
+	    <command>ssh-agent</command> is setgid to _ssh in order to
 	    prevent ptrace attacks.
 	  </para>
 	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>libvirt</term>
+        <listitem>
+          <para>
+            Access to the system libvirt daemon is controlled by this
+            group.  Membership in this group gives full daemon access
+            including (but not restricted to) managing virtual machines.
+          </para>
+        </listitem>
       </varlistentry>
     </variablelist>
 

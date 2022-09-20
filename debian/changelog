@@ -1,3 +1,66 @@
+base-passwd (3.6.1) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * passwd.master: Add _apt user, in order to eventually allow dropping
+    adduser out of Essential-plus-apt (closes: #969631).  Note that this
+    currently makes no attempt to migrate existing installations to the new
+    uid, since a number of things like TLS certificates and firewall rules
+    may depend on the existing uid.
+  * debian/postinst: Fix several shellcheck issues.
+
+  [ Christian Göttsche ]
+  * update-passwd.c:
+    - print filename on fclose error
+    - use correct filename in copy_filemodes
+    - drop t flag from fopen
+    - open temporary file exclusively
+  * replace obsolete autoconf macro
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 20 Sep 2022 11:22:51 +0100
+
+base-passwd (3.6.0) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * update-passwd(8) translations:
+    - German (thanks, Helge Kreutzmann; closes: #995724).
+  * Upgrade to debhelper v13.
+  * Simplify some debhelper overrides slightly.
+  * users-and-groups:
+    - Update copyright years.
+    - Rename ssh group to _ssh, matching openssh 1:8.4p1-6.
+    - Document libvirt group (thanks, Guido Günther; closes: #929133).
+  * Stop creating the gnats user and group on new installations (closes:
+    #897264).  It will not be automatically removed from existing
+    installations.
+
+  [ Yue Tao ]
+  * update-passwd.c: set walk to walk->next before removing (closes:
+    #1000796).
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since buster:
+    + Build-Depends: Drop versioned constraint on dpkg and dpkg-dev.
+
+  [ Jonathan Hettwer ]
+  * implement SELinux awareness (closes: #982906)
+
+  [ Peter Kjellerstedt ]
+  * Make it possible to build without debconf support or documentation
+    generation.
+
+ -- Colin Watson <cjwatson@debian.org>  Wed, 17 Aug 2022 12:14:12 +0100
+
+base-passwd (3.5.52) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * update-passwd.8: Document that backup copies of modified files are left
+    with the extension ".org" (closes: #993717).
+
+  [ Johannes Schauer Marin Rodrigues ]
+  * Support DPKG_ROOT in preinst and postinst (closes: #990122).
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 24 Sep 2021 22:02:16 +0100
+
 base-passwd (3.5.51) unstable; urgency=medium
 
   [ Raf Czlonka ]
