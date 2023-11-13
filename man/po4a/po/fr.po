@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: base-passwd\n"
-"POT-Creation-Date: 2014-01-07 14:00+0000\n"
+"POT-Creation-Date: 2021-09-05 14:11+0100\n"
 "PO-Revision-Date: 2016-11-01 19:19+0100\n"
 "Last-Translator: Baptiste Jammet <baptiste@mailoo.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -66,12 +66,20 @@ msgstr "DESCRIPTION"
 
 # NOTE: c'est étonnant pour 0 (root)
 #. type: Plain text
-#: ../update-passwd.8:14
+#: ../update-passwd.8:16
+#, fuzzy
+#| msgid ""
+#| "B<update-passwd> handles updates of /etc/passwd, /etc/shadow and /etc/"
+#| "group on running Debian systems.  It compares the current files to master "
+#| "copies, distributed in the base-passwd package, and updates all entries "
+#| "in the global system range (that is, 0\\(en99)."
 msgid ""
 "B<update-passwd> handles updates of /etc/passwd, /etc/shadow and /etc/group "
 "on running Debian systems.  It compares the current files to master copies, "
 "distributed in the base-passwd package, and updates all entries in the "
-"global system range (that is, 0\\(en99)."
+"global system range (that is, 0\\(en99).  It leaves backup copies of the "
+"previous versions of modified files with the extension \\(oq.org\\(cq (for "
+"\\(lqoriginal\\(rq)."
 msgstr ""
 "B<update-passwd> gère les mises à jour de /etc/passwd, /etc/shadow et /etc/"
 "group sur les systèmes Debian. Il compare les fichiers actuels avec les "
@@ -79,13 +87,13 @@ msgstr ""
 "entrées allouées globalement par le projet Debian (c'est-à-dire de 0 à 99)."
 
 #. type: SH
-#: ../update-passwd.8:15
+#: ../update-passwd.8:16
 #, no-wrap
 msgid "OPTIONS"
 msgstr "OPTIONS"
 
 #. type: Plain text
-#: ../update-passwd.8:19
+#: ../update-passwd.8:20
 msgid ""
 "B<update-passwd> follows the usual GNU command line syntax, with long "
 "options starting with two dashes (\\(oq-\\(cq)."
@@ -94,7 +102,7 @@ msgstr ""
 "longues commençant par deux tirets («\\ -\\ »)."
 
 #. type: TP
-#: ../update-passwd.8:19
+#: ../update-passwd.8:20
 #, no-wrap
 msgid "B<-p>,\\ B<--passwd-master=FILE>"
 msgstr "B<-p>, B<--passwd-master=FICHIER>"
@@ -102,7 +110,7 @@ msgstr "B<-p>, B<--passwd-master=FICHIER>"
 # NOTE: j'hésite à traduire passwd. Il ne s'agit pas des mots de pase, mais
 #       de tout ce qu'il y a autour.
 #. type: Plain text
-#: ../update-passwd.8:24
+#: ../update-passwd.8:25
 msgid ""
 "Use FILE as the master copy of the passwd database.  The default value is I</"
 "usr/share/base-passwd/passwd.master>."
@@ -111,13 +119,13 @@ msgstr ""
 "valeur par défaut est I</usr/share/base-passwd/passwd.master>."
 
 #. type: TP
-#: ../update-passwd.8:24
+#: ../update-passwd.8:25
 #, no-wrap
 msgid "B<-g>,\\ B<--group-master=FILE>"
 msgstr "B<-g>, B<--group-master=FICHIER>"
 
 #. type: Plain text
-#: ../update-passwd.8:29
+#: ../update-passwd.8:30
 msgid ""
 "Use FILE as the master copy of the group database.  The default value is I</"
 "usr/share/base-passwd/group.master>."
@@ -126,13 +134,13 @@ msgstr ""
 "valeur par défaut est I</usr/share/base-passwd/group.master>."
 
 #. type: TP
-#: ../update-passwd.8:29
+#: ../update-passwd.8:30
 #, no-wrap
 msgid "B<-P>,\\ B<--passwd=FILE>"
 msgstr "B<-P>, B<--passwd=FICHIER>"
 
 #. type: Plain text
-#: ../update-passwd.8:34
+#: ../update-passwd.8:35
 msgid ""
 "Use FILE as the system passwd database.  The default value is I</etc/passwd>."
 msgstr ""
@@ -140,13 +148,13 @@ msgstr ""
 "par défaut est I</etc/passwd>."
 
 #. type: TP
-#: ../update-passwd.8:34
+#: ../update-passwd.8:35
 #, no-wrap
 msgid "B<-S>,\\ B<--shadow=FILE>"
 msgstr "B<-S>, B<--shadow=FICHIER>"
 
 #. type: Plain text
-#: ../update-passwd.8:39
+#: ../update-passwd.8:40
 msgid ""
 "Use FILE as the system shadow database.  The default value is I</etc/shadow>."
 msgstr ""
@@ -154,13 +162,13 @@ msgstr ""
 "par défaut est I</etc/shadow>."
 
 #. type: TP
-#: ../update-passwd.8:39
+#: ../update-passwd.8:40
 #, no-wrap
 msgid "B<-G>,\\ B<--group=FILE>"
 msgstr "B<-G>, B<--group=FICHIER>"
 
 #. type: Plain text
-#: ../update-passwd.8:44
+#: ../update-passwd.8:45
 msgid ""
 "Use FILE as the system group database.  The default value is I</etc/group>."
 msgstr ""
@@ -168,24 +176,24 @@ msgstr ""
 "par défaut est I</etc/group>."
 
 #. type: TP
-#: ../update-passwd.8:44
+#: ../update-passwd.8:45
 #, no-wrap
 msgid "B<-s>,\\ B<--sanity-check>"
 msgstr "B<-s>, B<--sanity-check>"
 
 #. type: Plain text
-#: ../update-passwd.8:47
+#: ../update-passwd.8:48
 msgid "Only perform sanity-checks but don't do anything."
 msgstr "Ne réalise que les tests de contrôle, mais ne touche à rien."
 
 #. type: TP
-#: ../update-passwd.8:47
+#: ../update-passwd.8:48
 #, no-wrap
 msgid "B<-v>,\\ B<--verbose>"
 msgstr "B<-v>, B<--verbose>"
 
 #. type: Plain text
-#: ../update-passwd.8:51
+#: ../update-passwd.8:52
 msgid ""
 "Give detailed information about what we are doing.  A second -v gives "
 "additional detail."
@@ -194,24 +202,24 @@ msgstr ""
 "donne encore plus de précisions."
 
 #. type: TP
-#: ../update-passwd.8:51
+#: ../update-passwd.8:52
 #, no-wrap
 msgid "B<-n>,\\ B<--dry-run>"
 msgstr "B<-n>, B<--dry-run>"
 
 #. type: Plain text
-#: ../update-passwd.8:54
+#: ../update-passwd.8:55
 msgid "Don't do anything but only show what we would do."
 msgstr "Ne fait rien, montre seulement ce qui va être fait."
 
 #. type: TP
-#: ../update-passwd.8:54
+#: ../update-passwd.8:55
 #, no-wrap
 msgid "B<-L>,\\ B<--no-locking>"
 msgstr "B<-L>, B<--no-locking>"
 
 #. type: Plain text
-#: ../update-passwd.8:59
+#: ../update-passwd.8:60
 msgid ""
 "Don't attempt to lock the account database.  This should only be used for "
 "debugging purposes.  B<I repeat: do not do this unless you are really sure "
@@ -222,47 +230,57 @@ msgstr ""
 "pas cette option à moins d'être vraiment sûr d'en avoir besoin\\ !>"
 
 #. type: TP
-#: ../update-passwd.8:59
+#: ../update-passwd.8:60
 #, no-wrap
 msgid "B<-h>,\\ B<--help>"
 msgstr "B<-h>, B<--help>"
 
 #. type: Plain text
-#: ../update-passwd.8:63
+#: ../update-passwd.8:64
 msgid "Show a summary of how to use B<update-passwd>."
 msgstr "Affiche un résumé d'aide pour l'utilisation de B<update-passwd>."
 
 #. type: TP
-#: ../update-passwd.8:63
+#: ../update-passwd.8:64
 #, no-wrap
 msgid "B<-V>,\\ B<--version>"
 msgstr "B<-V>, B<--version>"
 
 #. type: Plain text
-#: ../update-passwd.8:66
+#: ../update-passwd.8:67
 msgid "Show the version number"
 msgstr "Affiche le numéro de version."
 
 #. type: SH
-#: ../update-passwd.8:66
+#: ../update-passwd.8:67
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr "VARIABLES D'ENVIRONNEMENT"
 
 #. type: TP
-#: ../update-passwd.8:67
+#: ../update-passwd.8:68
 #, no-wrap
 msgid "DEBIAN_HAS_FRONTEND"
 msgstr "DEBIAN_HAS_FRONTEND"
 
 #. type: Plain text
-#: ../update-passwd.8:81
+#: ../update-passwd.8:82
+#, fuzzy
+#| msgid ""
+#| "If this environment variable is sent and the B<--dry-run> flag was not "
+#| "given, B<update-passwd> uses debconf to prompt for whether to make "
+#| "changes.  Each proposed change will produce a separate prompt.  User or "
+#| "group removals, UID or GID changes, and home directory changes will be "
+#| "asked with high priority.  User or group additions and shell changes will "
+#| "be asked with medium priority.  Questions about whether to move entries "
+#| "above the NIS compat inclusion entry or whether to change the GECOS of a "
+#| "user are asked at low priority."
 msgid ""
-"If this environment variable is sent and the B<--dry-run> flag was not "
-"given, B<update-passwd> uses debconf to prompt for whether to make changes.  "
-"Each proposed change will produce a separate prompt.  User or group "
-"removals, UID or GID changes, and home directory changes will be asked with "
-"high priority.  User or group additions and shell changes will be asked with "
+"If this environment variable is set and the B<--dry-run> flag was not given, "
+"B<update-passwd> uses debconf to prompt for whether to make changes.  Each "
+"proposed change will produce a separate prompt.  User or group removals, UID "
+"or GID changes, and home directory changes will be asked with high "
+"priority.  User or group additions and shell changes will be asked with "
 "medium priority.  Questions about whether to move entries above the NIS "
 "compat inclusion entry or whether to change the GECOS of a user are asked at "
 "low priority."
@@ -270,23 +288,22 @@ msgstr ""
 "Si cette variable d'environnement est déclarée et l'argument B<--dry-run> "
 "n'est pas donné, B<update-passwd> utilise debconf pour demander quelles "
 "modifications effectuer. Chaque modification demandée produira un nouvel "
-"écran. La suppression d'utilisateurs ou de groupes, les modifications de UID, "
-"de GID ou de répertoire « home » sont demandées avec une priorité haute "
+"écran. La suppression d'utilisateurs ou de groupes, les modifications de "
+"UID, de GID ou de répertoire « home » sont demandées avec une priorité haute "
 "(« high »). Les ajouts d'utilisateur ou de groupe et les modifications "
-"d'interpréteur sont demandés avec une priorité moyenne (« medium »). "
-"Les questions concernant soit le déplacement des entrées au"
-"dessus de l'entrée NIS du mode compat, soit le changement du"
-"champ GECOS d'un utilisateur, sont posées avec une priorité basse"
-"(« low »)."
+"d'interpréteur sont demandés avec une priorité moyenne (« medium »). Les "
+"questions concernant soit le déplacement des entrées audessus de l'entrée "
+"NIS du mode compat, soit le changement duchamp GECOS d'un utilisateur, sont "
+"posées avec une priorité basse(« low »)."
 
 #. type: SH
-#: ../update-passwd.8:81
+#: ../update-passwd.8:82
 #, no-wrap
 msgid "BUGS"
 msgstr "BOGUES"
 
 #. type: Plain text
-#: ../update-passwd.8:87
+#: ../update-passwd.8:88
 msgid ""
 "At this moment B<update-passwd> does not verify the shadow-file.  It should "
 "check if the entries in the passwd are also in shadow and vice versa, and "
@@ -298,18 +315,18 @@ msgstr ""
 "fichiers."
 
 #. type: SH
-#: ../update-passwd.8:87
+#: ../update-passwd.8:88
 #, no-wrap
 msgid "AUTHOR"
 msgstr "AUTEUR"
 
 #. type: Plain text
-#: ../update-passwd.8:89
+#: ../update-passwd.8:90
 msgid "Wichert Akkerman E<lt>wakkerma@debian.orgE<gt>"
 msgstr "Wichert Akkerman E<lt>wakkerma@debian.orgE<gt>"
 
 #. type: Plain text
-#: ../update-passwd.8:93
+#: ../update-passwd.8:94
 msgid ""
 "This program was written for the Debian project, and is copyright "
 "1999\\(en2002 Wichert Akkerman and copyright 2002, 2003 Colin Watson.  It is "
@@ -319,5 +336,3 @@ msgstr ""
 "copyright 1999\\(en2002 Wichert Akkerman et le copyright 2002, 2003 Colin "
 "Watson. Il est distribué sous la licence publique générale du projet GNU "
 "(«\\ GPL\\ ») version 2."
-
-

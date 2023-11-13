@@ -2,14 +2,14 @@
 set -e
 
 if [ "$1" = install ]; then
-	if [ ! -e /etc/passwd ]; then
-		cat > /etc/passwd <<'EOF'
+	if [ ! -e "$DPKG_ROOT/etc/passwd" ]; then
+		cat > "$DPKG_ROOT/etc/passwd" <<'EOF'
 @PASSWD@
 EOF
 	fi
 
-	if [ ! -e /etc/group ]; then
-		cat > /etc/group <<'EOF'
+	if [ ! -e "$DPKG_ROOT/etc/group" ]; then
+		cat > "$DPKG_ROOT/etc/group" <<'EOF'
 @GROUP@
 EOF
 	fi

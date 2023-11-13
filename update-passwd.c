@@ -39,7 +39,14 @@
 #include <stdarg.h>
 #include <ctype.h>
 
+#ifdef HAVE_DEBCONF
 #include <cdebconf/debconfclient.h>
+#endif
+
+#ifdef HAVE_LIBSELINUX
+#include <selinux/selinux.h>
+#include <selinux/label.h>
+#endif
 
 #define DEFAULT_PASSWD_MASTER	"/usr/share/base-passwd/passwd.master"
 #define DEFAULT_GROUP_MASTER	"/usr/share/base-passwd/group.master"
@@ -78,7 +85,7 @@ const struct _info specialusers[] = {
     { 35, (FL_KEEPALL|FL_NOAUTOADD|FL_NOAUTOREMOVE)	},  /* dos	*/
     { 36, (FL_KEEPALL|FL_NOAUTOADD|FL_NOAUTOREMOVE)	},  /* msql	*/
     { 37, (FL_NOAUTOREMOVE)				},  /* operator */
-    { 41, (FL_KEEPHOME)					},  /* gnats	*/
+    { 41, (FL_KEEPHOME|FL_NOAUTOREMOVE)			},  /* gnats	*/
     { 70, (FL_NOAUTOREMOVE)				},  /* alias	*/
     { 71, (FL_KEEPALL|FL_NOAUTOADD|FL_NOAUTOREMOVE)	},  /* qmaild	*/
     { 72, (FL_KEEPALL|FL_NOAUTOADD|FL_NOAUTOREMOVE)	},  /* qmails	*/
@@ -97,6 +104,7 @@ const struct _info specialgroups[] = {
     { 32, (FL_NOAUTOREMOVE)				},  /* postgres */
     { 35, (FL_NOAUTOADD|FL_NOAUTOREMOVE)		},  /* dos	*/
     { 36, (FL_NOAUTOADD|FL_NOAUTOREMOVE)		},  /* msql	*/
+    { 41, (FL_NOAUTOREMOVE)				},  /* gnats	*/
     { 70, (FL_NOAUTOREMOVE)				},  /* qmail	*/
     { 0, 0}
 };
@@ -143,8 +151,98 @@ int		flag_debconf	= 0;
 const char*	user_domain	= DEFAULT_DEBCONF_DOMAIN;
 const char*	group_domain	= DEFAULT_DEBCONF_DOMAIN;
 
+#ifdef HAVE_DEBCONF
 struct debconfclient*	debconf	= NULL;
+#endif
 
+#ifdef HAVE_LIBSELINUX
+/* SELinux support */
+
+static struct selabel_handle* selabel_handle;
+
+static int selinux_setup(void) {
+
+    if (!is_selinux_enabled()) {
+        return 0;
+    }
+
+    /* Because this process is short lived, don't bother with selabel_close
+     * it isn't worth the additional complexity
+     */
+    selabel_handle = selabel_open(SELABEL_CTX_FILE, NULL, 0);
+    if (selabel_handle == NULL) {
+        const char * const reason = strerror(errno);
+
+        if (security_getenforce() != 0) {
+            fprintf(stderr, "SELinux: enabled but selabel_open failed: %s\n", reason);
+            return 1;
+        } else {
+            fprintf(stderr, "SELinux: enabled but in permissive mode, selabel_open failed: %s\n", reason);
+        }
+    }
+
+    return 0;
+}
+
+static int selinux_prepare_create_file(const char *path) {
+    char * ctx = NULL;
+    int    r   = 0;
+
+    if (selabel_handle == NULL) {
+        return 0;
+    }
+
+    if (selabel_lookup_raw(selabel_handle, &ctx, path, S_IFREG) != 0) {
+        if (errno == ENOENT) {
+            return 0;
+        }
+
+        const char * const reason = strerror(errno);
+
+        if (security_getenforce() != 0) {
+            fprintf(stderr, "SELinux: unable to lookup label for %s: %s\n", path, reason);
+            return 1;
+        } else {
+            fprintf(stderr, "SELinux: unable to lookup label for %s: %s\n", path, reason);
+            fprintf(stderr, "SELinux: ignoring error as in permissive mode, but a relabel is recommended.\n");
+            return 0;
+        }
+    }
+
+    r = setfscreatecon_raw(ctx);
+
+    freecon(ctx);
+
+    return r;
+}
+
+static void selinux_after_create_file(void) {
+    if (selabel_handle != NULL) {
+        int saved_errno = errno;
+        setfscreatecon_raw(NULL);
+        errno = saved_errno;
+    }
+}
+#else
+/* No SELinux support, provide stubs */
+
+static int selinux_setup(void) {
+    return 0;
+}
+
+static int selinux_prepare_create_file(const char *path) {
+    (void)path;
+
+    return 0;
+}
+
+static void selinux_after_create_file(void) {
+    return;
+}
+
+#endif
+
+#ifdef HAVE_DEBCONF
 /* Abort the program if talking to debconf fails.  Use ret exactly once. */
 #define DEBCONF_CHECK(ret)					\
     do {							\
@@ -162,6 +260,10 @@ struct debconfclient*	debconf	= NULL;
     DEBCONF_CHECK(debconf_register(debconf, (template), (question)))
 #define DEBCONF_SUBST(question, var, value) \
     DEBCONF_CHECK(debconf_subst(debconf, (question), (var), (value)))
+#else
+#define DEBCONF_REGISTER(template, question)
+#define DEBCONF_SUBST(question, var, value)
+#endif
 
 
 /* malloc() with out-of-memory checking.
@@ -189,6 +291,7 @@ char* xstrdup(const char *string) {
 /* asprintf() with out-of-memory checking.  Also fail if formatting fails so
  * that the caller doesn't have to check any error return.
  */
+__attribute__((format (printf, 1, 2)))
 char* xasprintf(const char* fmt, ...) {
     va_list	args;
     int		ret;
@@ -206,7 +309,7 @@ char* xasprintf(const char* fmt, ...) {
 
 /* Create an empty list-entry
  */
-struct _node* create_node() {
+struct _node* create_node(void) {
     struct _node*	newnode;
 
     newnode=(struct _node*)xmalloc(sizeof(struct _node));
@@ -581,7 +684,7 @@ int fputpwent(const struct passwd *passwd, FILE * f) {
 
 
 /* Simple function to print usage information */
-void usage() {
+void usage(void) {
     printf(
 	"Usage: update-passwd [OPTION]...\n"
 	"\n"
@@ -611,7 +714,7 @@ void usage() {
 
 /* Simple function to print our name and version
  */
-void version() {
+void version(void) {
     printf("update-passwd %s\n", PACKAGE_VERSION);
 }
 
@@ -621,6 +724,7 @@ void version() {
  * flag.  Aborts the problem on any failure.
  */
 int ask_debconf(const char* priority, const char* question) {
+#ifdef HAVE_DEBCONF
     int		ret;
     const char*	response;
 
@@ -640,6 +744,9 @@ int ask_debconf(const char* priority, const char* question) {
 	return 1;
     else
 	return 0;
+#else
+	return 0;
+#endif
 }
 
 
@@ -651,6 +758,8 @@ int ask_debconf(const char* priority, const char* question) {
 char* escape_debconf(const char* string) {
     char*	copy;
     char*       p;
+
+    assert(string);
 
     copy=xstrdup(string);
     for (p=copy; *p!='\0'; p++)
@@ -806,13 +915,13 @@ void process_old_entries(const struct _info* lst, struct _node** passwd, struct 
 		free(id);
 	    }
 
+	    walk=walk->next;
 	    if (make_change) {
 		if (opt_verbose)
 		    printf("Removing %s \"%s\" (%u)\n", descr, oldnode->name, oldnode->id);
 		remove_node(passwd, oldnode);
 		flag_dirty++;
 	    }
-	    walk=walk->next;
 	    continue;
 	}
 	walk=walk->next;
@@ -836,7 +945,7 @@ void process_changed_accounts(struct _node* passwd, struct _node* group, struct 
 	    continue;
 
 	mc=find_by_named_entry(master, passwd);
-	if (mc==NULL) 
+	if (mc==NULL)
 	    continue;
 
 	if (passwd->id!=mc->id) {
@@ -1039,7 +1148,18 @@ int write_passwd(const struct _node* passwd, const char* file) {
     if (opt_verbose>2)
 	printf("Writing passwd-file to %s\n", file);
 
-    if ((output=fopen(file, "wt"))==NULL) {
+    /* Delete possible left-over file */
+    (void) unlink(file);
+
+    if (selinux_prepare_create_file(sys_passwd) != 0) {
+        return 0;
+    }
+
+    output = fopen(file, "wx");
+
+    selinux_after_create_file();
+
+    if (output == NULL) {
 	fprintf(stderr, "Failed to open passwd-file %s for writing: %s\n",
 		file, strerror(errno));
 	return 0;
@@ -1054,7 +1174,7 @@ int write_passwd(const struct _node* passwd, const char* file) {
     }
 
     if (fclose(output)!=0) {
-	fprintf(stderr, "Error closing passwd-file: %s\n", strerror(errno));
+	fprintf(stderr, "Error closing passwd-file %s: %s\n", file, strerror(errno));
 	return 0;
     }
 
@@ -1068,7 +1188,18 @@ int write_shadow(const struct _node* shadow, const char* file) {
     if (opt_verbose>2)
 	printf("Writing shadow-file to %s\n", file);
 
-    if ((output=fopen(file, "wt"))==NULL) {
+    /* Delete possible left-over file */
+    (void) unlink(file);
+
+    if (selinux_prepare_create_file(sys_shadow) != 0) {
+        return 0;
+    }
+
+    output = fopen(file, "wx");
+
+    selinux_after_create_file();
+
+    if (output == NULL) {
 	fprintf(stderr, "Failed to open shadow-file %s for writing: %s\n",
 	       	file, strerror(errno));
 	return 0;
@@ -1083,7 +1214,7 @@ int write_shadow(const struct _node* shadow, const char* file) {
     }
 
     if (fclose(output)!=0) {
-	fprintf(stderr, "Error closing shadow-file: %s\n", strerror(errno));
+	fprintf(stderr, "Error closing shadow-file %s: %s\n", file, strerror(errno));
 	return 0;
     }
 
@@ -1110,7 +1241,19 @@ int write_group(const struct _node* group, const char* file) {
     if (opt_verbose>2)
 	printf("Writing group-file to %s\n", file);
 
-    if ((output=fopen(file, "wt"))==NULL) {
+    /* Delete possible left-over file */
+    (void) unlink(file);
+
+
+    if (selinux_prepare_create_file(sys_group) != 0) {
+        return 0;
+    }
+
+    output = fopen(file, "wx");
+
+    selinux_after_create_file();
+
+    if (output == NULL) {
 	fprintf(stderr, "Failed to open group-file %s for writing: %s\n",
 		file, strerror(errno));
 	return 0;
@@ -1125,7 +1268,7 @@ int write_group(const struct _node* group, const char* file) {
     }
 
     if (fclose(output)!=0) {
-	fprintf(stderr, "Error closing group-file: %s\n", strerror(errno));
+	fprintf(stderr, "Error closing group-file %s: %s\n", file, strerror(errno));
 	return 0;
     }
 
@@ -1170,7 +1313,7 @@ int copy_filemodes(const char* source, const char* target) {
     }
 
     if (chmod(target, st.st_mode)!=0) {
-	fprintf(stderr, "Error chmoding %s: %s\n", source, strerror(errno));
+	fprintf(stderr, "Error chmoding %s: %s\n", target, strerror(errno));
 	return 0;
     }
 
@@ -1190,12 +1333,12 @@ int copy_filemodes(const char* source, const char* target) {
 	    if (!S_ISLNK (tst.st_mode) &&
 		    chown (target, st.st_uid, st.st_gid) != 0) {
 		fprintf(stderr, "Error lchowning %s: %s\n",
-			source, strerror(errno));
+			target, strerror(errno));
 		return 0;
 	    }
 	} else {
 	    fprintf(stderr, "Error lchowning %s: %s\n",
-		    source, strerror(errno));
+		    target, strerror(errno));
 	    return 0;
 	}
     }
@@ -1262,7 +1405,7 @@ int put_file_in_place(const char* source, const char* target) {
 
 /* Rewrite the account-database if we made any changes
  */
-int commit_files() {
+int commit_files(void) {
     char*	wf;
 
     if (!flag_dirty) {
@@ -1337,7 +1480,7 @@ int commit_files() {
 
 /* Try to lock the account database
  */
-int lock_files() {
+int lock_files(void) {
     if (lckpwdf()!=0) {
 	fprintf(stderr, "Error locking files: %s\n", strerror(errno));
 	return 0;
@@ -1349,7 +1492,7 @@ int lock_files() {
 
 /* Try to unlock the account database
  */
-int unlock_files() {
+int unlock_files(void) {
     if (ulckpwdf()!=0) {
 	fprintf(stderr, "Error unlocking files: %s\n", strerror(errno));
 	return 0;
@@ -1427,6 +1570,7 @@ int main(int argc, char** argv) {
     /* If DEBIAN_HAS_FRONTEND is set in the environment, we're running under
      * debconf.  Enable debconf prompting unless --dry-run was also given.
      */
+#ifdef HAVE_DEBCONF
     if (getenv("DEBIAN_HAS_FRONTEND")!=NULL && !opt_dryrun) {
 	debconf=debconfclient_new();
 	if (debconf==NULL) {
@@ -1435,6 +1579,7 @@ int main(int argc, char** argv) {
 	}
 	flag_debconf=1;
     }
+#endif
 
     if (read_passwd(&master_accounts, master_passwd)!=0)
 	return 2;
@@ -1465,23 +1610,28 @@ int main(int argc, char** argv) {
     if (opt_sanity)
 	return 0;
 
+    if (selinux_setup() != 0)
+        return 3;
+
     if (!opt_nolock && !opt_dryrun)
 	if (!lock_files())
-	    return 3;
+	    return 4;
 
     umask(0077);
 
     if (!commit_files()) {
 	unlock_files();
-	return 4;
+	return 5;
     }
 
     if (!opt_nolock && !opt_dryrun)
 	if (!unlock_files())
-	    return 5;
+	    return 6;
 
+#ifdef HAVE_DEBCONF
     if (debconf!=NULL)
 	debconfclient_delete(debconf);
+#endif
 
     if (opt_dryrun)
 	return flag_dirty;
