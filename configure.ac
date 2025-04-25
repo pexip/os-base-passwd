@@ -13,7 +13,18 @@ AC_SYS_LARGEFILE
 
 dnl Scan for things we need
 AC_CHECK_FUNCS([putgrent])
-AC_CHECK_LIB([selinux], [is_selinux_enabled])
+
+dnl Check for SELinux
+AC_MSG_CHECKING([whether to enable SELinux support])
+AC_ARG_ENABLE([selinux],
+  [AS_HELP_STRING([--disable-selinux], [disable support for SELinux])],
+  [],
+  [enable_selinux=yes])
+AC_MSG_RESULT($enable_selinux)
+AS_IF([test "x$enable_selinux" != xno],
+  [AC_CHECK_LIB([selinux], [is_selinux_enabled], [],
+    [AC_MSG_ERROR(
+      [SELinux support not available (use --disable-selinux to disable)])])])
 
 dnl Check for debconf
 AC_MSG_CHECKING([whether to enable debconf support])

@@ -1,3 +1,69 @@
+base-passwd (3.6.7) unstable; urgency=medium
+
+  [ Marc Haber ]
+  * Add myself to Uploaders.
+
+  [ Colin Watson ]
+  * Debconf translations:
+    - Catalan (thanks, Carles Pina i Estany; closes: #1101110).
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 23 Mar 2025 15:30:08 +0000
+
+base-passwd (3.6.6) unstable; urgency=medium
+
+  * Move to team maintenance under pkg-shadow-devel.
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 29 Dec 2024 13:43:54 +0000
+
+base-passwd (3.6.5) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Apply X-Style: black.
+  * Add Romanian translation of update-passwd(8) (thanks, Remus-Gabriel
+    Chelu; closes: #1055383).
+
+  [ Maks Mishin ]
+  * Fix potential descriptor leaks.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 21 Oct 2024 18:26:50 +0100
+
+base-passwd (3.6.4) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * Ensure that /etc/subuid and /etc/subgid exist (closes: #1074121).
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 01 Jul 2024 12:20:04 +0100
+
+base-passwd (3.6.3) unstable; urgency=medium
+
+  [ Samuel Thibault ]
+  * Fix non-Linux cross-builds (closes: #1057055).
+
+ -- Colin Watson <cjwatson@debian.org>  Wed, 29 Nov 2023 09:09:27 +0000
+
+base-passwd (3.6.2) unstable; urgency=medium
+
+  [ Peter Kjellerstedt ]
+  * Make it possible to configure whether to use SELinux or not.
+
+  [ Gioele Barabucci ]
+  * d/postinst: Remove code for upgrades from outdated version 3.2.2.
+  * d/control: Remove unused w3m build dependency (closes: #1051810).
+  * Support <nodoc> build profile (closes: #1051809).
+
+  [ Colin Watson ]
+  * Debconf translations:
+    - Romanian (thanks, Remus-Gabriel Chelu; closes: #1031149).
+    - Swedish (thanks, Peter Kvillegård; closes: #1050440).
+  * Explicitly build-depend on docbook, since otherwise the build fails if
+    docbook-xml happens to be installed before installing build-dependencies
+    (closes: #1033422).
+
+  [ Samuel Thibault ]
+  * Fix non-Linux builds (closes: #1054098).
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 17 Oct 2023 23:35:50 +0100
+
 base-passwd (3.6.1+pexip24u3) pexip-bookworm; urgency=medium
 
   * New versioning scheme
